@@ -17,7 +17,7 @@ app.use(cors())
 const chats = {}
 
 const startGame = async chatId => {
-    const randomDigit = Math.floor(Math.random()*10)
+    const randomDigit = Math.floor(Math.random() * 10)
     chats[chatId] = randomDigit
     botLastMsg = await bot.sendMessage(chatId, "Я загадал число от 1 до 9, попробуй его отгадать", gameOptions)
 }
@@ -45,14 +45,13 @@ const start = () => {
             })
         }
 
-        if (msg.web_app_data?.data) {
+        if (msg?.web_app_data?.data) {
             try {
-                const data = JSON.parse(msg.web_app_data?.data)
+                const data = JSON.parse(msg?.web_app_data?.data)
                 console.log(data)
                 await bot.sendMessage(chatId, "Спасибо за обратную связь")
                 await bot.sendMessage(chatId, "Ваша страна " + data.country)
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e)
             }
         }
@@ -62,20 +61,20 @@ const start = () => {
 start()
 
 app.post("/web-data", async (req, res) => {
+    console.log("WATAFAK??????")
     const {queryId, products, totalPrice} = req.body
     try {
         console.log(req)
         await bot.answerWebAppQuery(queryId, {
             type: "article",
             id: queryId,
-            title: "Заказ успешно сделан",
+            title: "Успешная покупка",
             input_message_content: {
                 message_text: "Конгратюлэйшинс, вы потратили " + totalPrice + " деревянных"
             }
         })
         return res.status(200).json({})
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         return res.status(500).json({})
     }
