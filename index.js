@@ -14,16 +14,6 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-const chats = {}
-
-const startGame = async chatId => {
-    const randomDigit = Math.floor(Math.random() * 10)
-    chats[chatId] = randomDigit
-    botLastMsg = await bot.sendMessage(chatId, "Я загадал число от 1 до 9, попробуй его отгадать", gameOptions)
-}
-
-let botLastMsg = null
-
 const start = () => {
     bot.on("message", async msg => {
         const text = msg.text
@@ -61,10 +51,8 @@ const start = () => {
 start()
 
 app.post("/web-data", async (req, res) => {
-    console.log("WATAFAK??????")
     const {queryId, products, totalPrice} = req.body
     try {
-        console.log(req)
         await bot.answerWebAppQuery(queryId, {
             type: "article",
             id: queryId,
